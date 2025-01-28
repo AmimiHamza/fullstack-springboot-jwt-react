@@ -5,17 +5,27 @@ const Login = () => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
+        var payload = {login: email, password: password};
+        console.log(payload);
         e.preventDefault();
         fetch('http://localhost:8082/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify(payload),
         })
-            .then((res) => res.json())
+            .then((res) => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
+            })
             .then((data) => {
-                console.log(data);
+            console.log(data);
+            })
+            .catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
             });
     };
 
